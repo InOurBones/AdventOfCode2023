@@ -3,3 +3,4 @@ package-lock.json
 cs/**/bin
 cs/**/obj
 *.sln
+.vscode
