@@ -1,16 +1,10 @@
-namespace HelloWorld;
-
-using System;
-using System.Collections;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 
-class Program
+partial class Program
 {
-    static readonly string fileLocation = "../../../input/day_01.txt";
-    static readonly Regex reNumbers = new Regex(@"[0-9]");
-    static readonly Dictionary<string, string> NUMBERS = new Dictionary<string, string>()
+    static readonly string FILE_LOCATION = "../../../input/day_01.txt";
+    static readonly Regex reNumbers = MyRegex();
+    static readonly Dictionary<string, string> NUMBERS = new()
     {
         { "one", "o1e" },
         { "two", "t2o" },
@@ -25,7 +19,7 @@ class Program
 
     static void Main(string[] args)
     {
-        string[] arr = File.ReadAllLines(fileLocation);
+        string[] arr = File.ReadAllLines(FILE_LOCATION);
 
         int total = arr.Aggregate(0, (sum, line) => {
             foreach (var key in NUMBERS.Keys)
@@ -38,10 +32,13 @@ class Program
                 .Select(m => m.Groups[0].Value)
                 .ToArray();
 
-            int num = Int32.Parse(matchedNumbers.First() + matchedNumbers.Last());
+            int num = int.Parse(matchedNumbers.First() + matchedNumbers.Last());
             return sum + num;
         });
 
         Console.WriteLine(total);
     }
+
+    [GeneratedRegex(@"[0-9]")]
+    private static partial Regex MyRegex();
 }
