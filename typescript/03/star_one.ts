@@ -29,7 +29,7 @@ function adjecentNumber(pos: number[][], k: string): number {
         for (const [a, b] of ADJECENT) {
             if (Object.prototype.hasOwnProperty.call(symbolDict, (x + a)) &&
                 (Object.prototype.hasOwnProperty.call(symbolDict[x + a], (y + b))))
-                return Number(k)
+                return parseInt(k)
         }
     }
     return 0

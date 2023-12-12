@@ -29,7 +29,7 @@ function adjecentNumber(numbers: any[][], xg: number, yg: number): number[] {
                 (r: number[]) => r.every((value, index) => postToCheck[index] == value)
             )  // we can ignore the r.length check because we only store arrays with 2 values
             if (posIncludes) {
-                tmp.push(Number(number))
+                tmp.push(parseInt(number))
                 break
             }
         }
