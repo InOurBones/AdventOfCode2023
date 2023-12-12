@@ -34,7 +34,7 @@ def map_intersect(mapping, intersect):
     retval = (mapping[1]+diff_lower,mapping[1]+diff_lower+intersect_len)
     return retval
 
-def process_map_seeds(map,seeds):
+def process_map_seeds(map, seeds):
     ranges = []
     while len(seeds)>0:
         item = seeds.pop(0)
@@ -46,7 +46,7 @@ def process_map_seeds(map,seeds):
             ranges.append(map_intersect(mapping,intersect))
             if intersect[0]==item[0] and intersect[1] == item[1]:
                 break
-            
+
         if len_before == len(ranges):
             ranges.append(item)
     return ranges
