@@ -3,6 +3,11 @@ import os
 input_file = os.path.join(os.path.dirname(__file__), "../../input/day_03.txt")
 
 DIGITS = {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9"}
+ADJECENT = [
+    (-1, -1), (0, -1), (1, -1),
+    (-1, 0), (1, 0),
+    (-1, 1), (0, 1), (1, 1)
+]
 
 with open(input_file, "r") as file:
     lines = file.readlines()
@@ -12,12 +17,6 @@ for i, line in enumerate(lines):
     for j, c in enumerate(line):
         if c in "*":
             gears.append((i, j))
-
-ADJECENT = [
-    (-1, -1), (0, -1), (1, -1),
-    (-1, 0), (1, 0),
-    (-1, 1), (0, 1), (1, 1)
-]
 
 def adjecent_number(xg, yg) -> int:
     tmp = []
