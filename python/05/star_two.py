@@ -1,31 +1,17 @@
 import os
+from typing import List, Tuple
 
 input_file = os.path.join(os.path.dirname(__file__), "../../input/day_05.txt")
 
-def lower(l1, l2):
-    minval = min(l1[0],l2[0])
-    maxlower = max(l1[0],l2[0]) - 1 #maxlower already intersects
-    if maxlower <= minval:
-        return tuple()
-    return (minval, maxlower)
+with open(input_file, "r") as file:
+    input = file.read()
 
-def intersect(l1, l2):
-    min_intersect = max(l1[0],l2[0]) # lower bound of intersect
-    max_intersect = min(l1[1],l2[1]) #upper bound of intersect
+def find_intersect(l1: List[int], l2: List[int]) -> Tuple:
+    min_intersect = max(l1[0],l2[0])
+    max_intersect = min(l1[1],l2[1])
     if min_intersect>max_intersect:
-        return tuple() #same number intersect still included
-    return (min_intersect,max_intersect)
-    
-
-def upper(l1, l2):
-    maxval = max(l1[1],l2[1])
-    minupper = min(l1[1],l2[1])+1 #minupper already intersects
-    if minupper>=maxval:
         return tuple()
-    return (minupper, maxval)
-
-def divide(l1, l2):
-    return lower(l1,l2), intersect(l1,l2), upper(l1,l2)
+    return (min_intersect,max_intersect)
 
 def create_seed_ranges(iterable):
     l = []
@@ -48,41 +34,27 @@ def map_intersect(mapping, intersect):
     retval = (mapping[1]+diff_lower,mapping[1]+diff_lower+intersect_len)
     return retval
 
-def process_map_seeds(map,seeds, edgecases):
+def process_map_seeds(map,seeds):
     ranges = []
     while len(seeds)>0:
         item = seeds.pop(0)
         len_before = len(ranges)
         for mapping in map:
-            lower, intersect, upper = divide(item, mapping[0])
+            intersect = find_intersect(item, mapping[0])
             if intersect==tuple():
-                # no intersect found yet: cannot map
                 continue
             ranges.append(map_intersect(mapping,intersect))
             if intersect[0]==item[0] and intersect[1] == item[1]:
-                #full intersect
                 break
-            if edgecases:
-                #always discard empty lower and upper
-                if upper != tuple() and upper[1]==item[1]:
-                    seeds.append(upper) #continue processing rest
-                elif lower !=tuple() and lower[0]==item[0]:
-                    seeds.append(lower) #continue processing rest
+            
         if len_before == len(ranges):
-            ranges.append(item) # no mapping found
+            ranges.append(item)
     return ranges
 
-with open(input_file, "r") as file:
-    input = file.read()
-
-maps = input.split("\n\n") #split large sections
+maps = input.split("\n\n")
 seeds = create_seed_ranges([int(x) for x in maps.pop(0).split(": ")[1].split(" ")])
-maps = [x.split("\n")[1:] for x in maps] #split into lines, cut head
+maps = [x.split("\n")[1:] for x in maps]
 
-def run(edgecase):
-    seedlist = [x for x in seeds] # copy for destructive operation
-    for map_item in maps:
-        seedlist = process_map_seeds(convert_map(map_item), seedlist,edgecase)
-    print(min([item[0] for item in seedlist]))
-
-run(False)
+for map_item in maps:
+    seedlist = process_map_seeds(convert_map(map_item), seedlist)
+print(min([item[0] for item in seedlist]))
